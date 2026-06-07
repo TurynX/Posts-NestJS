@@ -7,6 +7,7 @@ import {
   Request,
   UnauthorizedException,
   Get,
+  Delete,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -24,7 +25,9 @@ export class PostController {
     if (!sub) {
       throw new UnauthorizedException('User not found');
     }
-    return this.postService.create(dto, sub);
+    const post = await this.postService.create(dto, sub);
+
+    return { message: 'Post created successfully', post };
   }
 
   @Get('get')
@@ -32,5 +35,30 @@ export class PostController {
   @HttpCode(200)
   async getAll() {
     return this.postService.getAll();
+  }
+
+  @Get('get/:authorId')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  async getByAuthor(@Request() req: any) {
+    const authorId = req.params.authorId;
+    if (!authorId) {
+      throw new UnauthorizedException('Missing authorId parameter');
+    }
+    return this.postService.getByAuthor(authorId);
+  }
+
+  @Delete('delete/:id')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  async delete(@Request() req: any) {
+    const id = req.params.id;
+    if (!id) {
+      throw new UnauthorizedException('Missing id parameter');
+    }
+    const authorId = req.user.sub;
+    const post = await this.postService.delete(id, authorId);
+
+    return { message: 'Post deleted successfully', post };
   }
 }

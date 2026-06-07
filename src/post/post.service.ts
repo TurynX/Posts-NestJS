@@ -1,40 +1,37 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreatePostUseCase } from './use-cases/create-post.use-case';
+import { GetAllPostsUseCase } from './use-cases/get-all-posts.use-case';
+import { DeletePostUseCase } from './use-cases/delete-post.use-case';
+import { GetPostByAuthorUseCase } from './use-cases/get-post-by-author.use-case';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly createPostUseCase: CreatePostUseCase,
+    private readonly getAllPostsUseCase: GetAllPostsUseCase,
+    private readonly deletePostUseCase: DeletePostUseCase,
+    private readonly getPostByAuthorUseCase: GetPostByAuthorUseCase,
+  ) {}
 
   async create(dto: CreatePostDto, authorId: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: authorId },
-    });
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-
-    const post = await this.prisma.post.create({
-      data: {
-        title: dto.title,
-        content: dto.content,
-        authorId,
-      },
-    });
+    const post = await this.createPostUseCase.execute(
+      dto.title,
+      dto.content,
+      authorId,
+    );
     return post;
   }
 
   async getAll() {
-    const posts = await this.prisma.post.findMany({
-      include: {
-        author: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
-    return posts;
+    return this.getAllPostsUseCase.execute();
+  }
+
+  async getByAuthor(authorId: string) {
+    return this.getPostByAuthorUseCase.execute(authorId);
+  }
+
+  async delete(postId: string, authorId: string) {
+    return this.deletePostUseCase.execute(postId, authorId);
   }
 }

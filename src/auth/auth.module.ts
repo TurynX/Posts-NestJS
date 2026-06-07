@@ -4,6 +4,10 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constant';
 import { AuthGuard } from './auth.guard';
+import { CreateUserUseCase } from './use-cases/create-user.use-case';
+import { LoginUserUseCase } from './use-cases/login-user-use-case';
+import { AUTH_REPOSITORY } from './repositories/auth.repository.interface';
+import { AuthRepository } from './repositories/auth.repository';
 
 @Module({
   imports: [
@@ -13,7 +17,17 @@ import { AuthGuard } from './auth.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthGuard],
+  providers: [
+    AuthService,
+    AuthGuard,
+    CreateUserUseCase,
+    LoginUserUseCase,
+    {
+      provide: AUTH_REPOSITORY,
+      useClass: AuthRepository,
+    },
+  ],
+
   exports: [AuthGuard, JwtModule],
 })
 export class AuthModule {}

@@ -10,20 +10,16 @@ export class AuthController {
   @Post('register')
   @HttpCode(201)
   async register(@Body() dto: CreateUserDto) {
-    return this.authService.register(dto);
+    const user = await this.authService.register(dto);
+
+    return { message: 'User registered successfully', user };
   }
 
   @Post('login')
   @HttpCode(200)
   async login(@Body() dto: LoginUserDto) {
-    return this.authService.login(dto);
-  }
+    const user = await this.authService.login(dto);
 
-  @Post('createpost')
-  @HttpCode(201)
-  async createPost() {
-    return {
-      message: 'post created',
-    };
+    return { message: 'User logged in successfully', user };
   }
 }
