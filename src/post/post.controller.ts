@@ -57,6 +57,7 @@ export class PostController {
       throw new UnauthorizedException('Missing id parameter');
     }
     const authorId = req.user.sub;
+
     const post = await this.postService.delete(id, authorId);
 
     return { message: 'Post deleted successfully', post };

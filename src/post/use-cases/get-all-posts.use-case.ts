@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import type { IPostRepository } from '../repositories/post.repository.interface';
 import { POST_REPOSITORY } from '../repositories/post.repository.interface';
 
@@ -9,6 +9,8 @@ export class GetAllPostsUseCase {
   ) {}
 
   async execute() {
-    return this.postRepository.findAll();
+    const posts = await this.postRepository.findAll();
+
+    return posts;
   }
 }

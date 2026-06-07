@@ -8,6 +8,8 @@ import { GetPostByAuthorUseCase } from './use-cases/get-post-by-author.use-case'
 import { DeletePostUseCase } from './use-cases/delete-post.use-case';
 import { POST_REPOSITORY } from './repositories/post.repository.interface';
 import { PostRepository } from './repositories/post.repository';
+import { AUTH_REPOSITORY } from 'src/auth/repositories/auth.repository.interface';
+import { AuthRepository } from 'src/auth/repositories/auth.repository';
 
 @Module({
   imports: [AuthModule],
@@ -21,6 +23,11 @@ import { PostRepository } from './repositories/post.repository';
     {
       provide: POST_REPOSITORY,
       useClass: PostRepository,
+    },
+
+    {
+      provide: AUTH_REPOSITORY,
+      useClass: AuthRepository,
     },
   ],
 })
