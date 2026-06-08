@@ -8,6 +8,7 @@ import { CreateUserUseCase } from './use-cases/create-user.use-case';
 import { LoginUserUseCase } from './use-cases/login-user-use-case';
 import { AUTH_REPOSITORY } from './repositories/auth.repository.interface';
 import { AuthRepository } from './repositories/auth.repository';
+import { RefreshTokenUseCase } from './use-cases/refresh-token.use-case';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthRepository } from './repositories/auth.repository';
     AuthGuard,
     CreateUserUseCase,
     LoginUserUseCase,
+    RefreshTokenUseCase,
     {
       provide: AUTH_REPOSITORY,
       useClass: AuthRepository,

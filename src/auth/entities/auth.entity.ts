@@ -7,3 +7,11 @@ export class Auth {
     public readonly token?: string,
   ) {}
 }
+
+export class Token {
+  constructor(
+    public readonly userId: string,
+    public readonly refreshToken: string,
+    public readonly expiresAt: Date,
+  ) {}
+}
