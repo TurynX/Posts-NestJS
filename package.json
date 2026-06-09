@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:post": "jest --config ./test/jest-e2e.json --testPathPatterns=post.e2e-spec.ts",
     "test:auth:service": "jest --watch src/auth/auth-test.service.spec.ts"
   },
   "dependencies": {

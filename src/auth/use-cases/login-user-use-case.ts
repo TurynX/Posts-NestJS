@@ -16,7 +16,7 @@ export class LoginUserUseCase {
   async execute(
     email: string,
     password: string,
-  ): Promise<{ token: string; refreshToken: string }> {
+  ): Promise<{ userId: string; token: string; refreshToken: string }> {
     const user = await this.authRepository.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -30,6 +30,6 @@ export class LoginUserUseCase {
     const refreshToken = randomUUID();
     await this.authRepository.refreshToken(user.id, refreshToken);
 
-    return { token, refreshToken };
+    return { userId: user.id, token, refreshToken };
   }
 }
